@@ -147,34 +147,48 @@
       <updated>1594865254471</updated>
       <workItem from="1594865266149" duration="499000" />
       <workItem from="1594867577460" duration="10765000" />
-      <workItem from="1594896339813" duration="4416000" />
+      <workItem from="1594896339813" duration="8930000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
   <component name="WindowStateProjectService">
+    <state x="250" y="0" key="CommitChangelistDialog2" timestamp="1594900964918">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="250" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1594900964918" />
     <state x="420" y="95" key="FileChooserDialogImpl" timestamp="1594867769848">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="420" y="95" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1594867769848" />
-    <state width="1237" height="163" key="GridCell.Tab.0.bottom" timestamp="1594895920471">
+    <state width="1237" height="163" key="GridCell.Tab.0.bottom" timestamp="1594904983919">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="163" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1594895920471" />
-    <state width="1237" height="163" key="GridCell.Tab.0.center" timestamp="1594895920470">
+    <state width="1237" height="163" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1594904983919" />
+    <state width="1237" height="163" key="GridCell.Tab.0.center" timestamp="1594904983919">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="163" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1594895920470" />
-    <state width="1237" height="163" key="GridCell.Tab.0.left" timestamp="1594895920470">
+    <state width="1237" height="163" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1594904983919" />
+    <state width="1237" height="163" key="GridCell.Tab.0.left" timestamp="1594904983919">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="163" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1594895920470" />
-    <state width="1237" height="163" key="GridCell.Tab.0.right" timestamp="1594895920471">
+    <state width="1237" height="163" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1594904983919" />
+    <state width="1237" height="163" key="GridCell.Tab.0.right" timestamp="1594904983919">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="163" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1594895920471" />
+    <state width="1237" height="163" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1594904983919" />
     <state x="142" y="0" key="SettingsEditor" timestamp="1594877016391">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -193,5 +207,6 @@
     <SUITE FILE_PATH="coverage/Q$http_post.coverage" NAME="http post请求 Coverage Results" MODIFIED="1594868789450" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Q$send.coverage" NAME="send Coverage Results" MODIFIED="1594893743954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Q$receive.coverage" NAME="receive Coverage Results" MODIFIED="1594893810778" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../单词复习类/单词复习程序/单词复习程序v4.0 (自用)(matplotlib封装导致空间过大)" />
+    <SUITE FILE_PATH="coverage/q$receive__1_.coverage" NAME="receive (1) Coverage Results" MODIFIED="1594904983910" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
