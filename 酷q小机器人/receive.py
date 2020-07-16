@@ -11,13 +11,15 @@ status = {}
 
 def main(qq_sender, message_receive):
     # begin with changing the status code
-    if str(qq_sender) not in status.keys():
+    if str(qq_sender) not in status.keys():  # 初次使用
         status[str(qq_sender)] = 0
-        send(qq_sender, "您好,本机器人有3个模式\n"
-                        "M0:聊天模式(默认模式),调用的是小思机器人\n"
-                        "M1:导入单词模式\n"
-                        "M2:复习单词模式\n"
-                        "若需要切换模式请输入M0/M1/M2或m0/m1/m2\n"
+        send(qq_sender, "您好,本机器人有5个模式\n"
+                        "M0:聊天模式(默认模式),调用的是小思机器人(思知OwnThink)\n"
+                        "M1:导入英语单词模式\n"
+                        "M2:复习英语单词模式\n"
+                        "M3:导入法语单词模式\n"
+                        "M4:复习法语单词模式\n"
+                        "若需要切换模式请输入M0/M1/M2/M3/M4 (m可以小写)\n"
                         '当前版本暂不支持处理表情&图片，只会原路返回')
 
     elif status[str(qq_sender)] in [3, 4]:
@@ -33,6 +35,18 @@ def main(qq_sender, message_receive):
                         '若确认要开始请直接回复想要导入的单词')
 
     elif message_receive in ['m2', 'M2']:   # , '复习', '我要复习', '学习', '我要学习'
+        status[str(qq_sender)] = 2
+        send(qq_sender, '即将开始复习当前数据库中的单词,\n'
+                        '若想要取消请回复"m0"或"M0",\n'
+                        '若确认开始请回复任意其他语句')
+
+    elif message_receive in ['m3', 'M3']:   # , '输入', 'input', '+', '添加', '添加单词'
+        status[str(qq_sender)] = 1
+        send(qq_sender, '即将向当前数据库导入单词，\n'
+                        '若想要取消请回复"m0"或"M0",\n'
+                        '若确认要开始请直接回复想要导入的单词')
+
+    elif message_receive in ['m4', 'M4']:   # , '复习', '我要复习', '学习', '我要学习'
         status[str(qq_sender)] = 2
         send(qq_sender, '即将开始复习当前数据库中的单词,\n'
                         '若想要取消请回复"m0"或"M0",\n'
@@ -58,19 +72,29 @@ def main(qq_sender, message_receive):
             answer = get_answer(message_receive)
             send(qq_sender, answer)
 
-    elif status[str(qq_sender)] == 3:
-        code_change = input_word(qq_sender, message_receive)
+    elif status[str(qq_sender)] == 11:
+        code_change = input_word(qq_sender, message_receive, 'en')
         if code_change == 1:
             status[str(qq_sender)] = 0
 
-    elif status[str(qq_sender)] == 4:
-        code_change = review(qq_sender)
+    elif status[str(qq_sender)] == 12:
+        code_change = review(qq_sender, 'en')
+        if code_change == 1:
+            status[str(qq_sender)] = 0
+
+    elif status[str(qq_sender)] == 13:
+        code_change = input_word(qq_sender, message_receive, 'fr')
+        if code_change == 1:
+            status[str(qq_sender)] = 0
+
+    elif status[str(qq_sender)] == 14:
+        code_change = review(qq_sender, 'fr')
         if code_change == 1:
             status[str(qq_sender)] = 0
 
     # end with changing the status code
-    if status[str(qq_sender)] in [1, 2]:
-        status[str(qq_sender)] += 2
+    if status[str(qq_sender)] in [1, 2, 3, 4]:
+        status[str(qq_sender)] += 10  # 11,12,13,14表明是的是对应模式的激活态
 
 
 def receive():

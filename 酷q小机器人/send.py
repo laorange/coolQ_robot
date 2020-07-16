@@ -1,7 +1,6 @@
 # Send
 # 用requests构造一个http post请求，post的数据填入相关信息：
 # https://zhuanlan.zhihu.com/p/96892167?from_voters_page=true
-
 import requests
 
 
@@ -18,6 +17,10 @@ def send(user_id=2625835752, message=''):
     r = requests.post(api_url, data=data)
     print(r.text)
     return ''
+
+
+if __name__ == '__main__':
+    send(message='你好')
 
 # class Send:
 #     def __init__(self, user_id=2625835752, message=''):
@@ -37,12 +40,3 @@ def send(user_id=2625835752, message=''):
 #
 #         r = requests.post(api_url, data=self.data)
 #         print(r.text)
-
-
-if __name__ == '__main__':
-    send(message='你好')
-
-
-
-
-
