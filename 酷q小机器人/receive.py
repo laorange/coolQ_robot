@@ -11,15 +11,14 @@ status = {}
 
 def main(qq_sender, message_receive):
     # begin with changing the status code
-    # print(type(message_receive))  # int
     if str(qq_sender) not in status.keys():
         status[str(qq_sender)] = 0
         send(qq_sender, "您好,本机器人有3个模式\n"
-                        "M0:聊天模式(默认模式)\n"
+                        "M0:聊天模式(默认模式),调用的是小思机器人\n"
                         "M1:导入单词模式\n"
                         "M2:复习单词模式\n"
                         "若需要切换模式请输入M0/M1/M2或m0/m1/m2\n"
-                        '当前版本暂不支持处理表情&图片')
+                        '当前版本暂不支持处理表情&图片，只会原路返回')
 
     elif status[str(qq_sender)] in [3, 4]:
         if message_receive in ['m0', 'M0']:
