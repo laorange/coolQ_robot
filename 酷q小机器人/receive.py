@@ -6,35 +6,46 @@ from review import review
 from input import input_word
 from robot import get_answer
 
-# 全局变量
 status = {}
 
 
 def main(qq_sender, message_receive):
     # begin with changing the status code
-    if message_receive in ['m1', 'M1']:     # , '输入', 'input', '+', '添加', '添加单词'
+    if str(qq_sender) not in status.keys():
+        status[str(qq_sender)] = 0
+
+    elif message_receive in ['m0', 'M0']:  # , '结束', 'end', 'over', 'stop'
+        status[str(qq_sender)] = 0
+
+    elif status[str(qq_sender)] in [3, 4]:
+        pass
+
+    elif message_receive in ['m1', 'M1']:     # , '输入', 'input', '+', '添加', '添加单词'
         status[str(qq_sender)] = 1
+        send(qq_sender, '即将向当前数据库导入单词，\n'
+                        '若想要取消请回复"m0"或"M0",\n'
+                        '若确认开始请回复任意其他语句')
 
     elif message_receive in ['m2', 'M2']:   # , '复习', '我要复习', '学习', '我要学习'
         status[str(qq_sender)] = 2
+        send(qq_sender, '即将开始复习当前数据库中的单词,\n'
+                        '若想要取消请回复"m0"或"M0",\n'
+                        '若确认开始请回复任意其他语句')
 
-    elif message_receive in ['m0', 'M0']:   # , '结束', 'end', 'over', 'stop'
-        status[str(qq_sender)] = 0
-
-    # 功能函数
-    def chat():
+    # 根据状态执行功能
+    if status[str(qq_sender)] == 0:  # chat
         answer = get_answer(message_receive)
         send(qq_sender, answer)
 
-    # 根据状态执行功能
-    if status[str(qq_sender)] == 0:
-        chat()
-
     elif status[str(qq_sender)] == 3:
-        input_word(message_receive)
+        code_change = input_word(message_receive)
+        if code_change == 1:
+            status[str(qq_sender)] = 0
 
     elif status[str(qq_sender)] == 4:
-        review(qq_sender)
+        code_change = review(qq_sender)
+        if code_change == 1:
+            status[str(qq_sender)] = 0
 
     # end with changing the status code
     if status[str(qq_sender)] in [1, 2]:
