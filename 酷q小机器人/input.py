@@ -1,2 +1,2 @@
-def input_word():
+def input_word(word):
     pass
