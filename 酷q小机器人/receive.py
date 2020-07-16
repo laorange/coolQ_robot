@@ -22,7 +22,7 @@ def main(qq_sender, message_receive):
                         "若需要切换模式请输入M0/M1/M2/M3/M4 (m可以小写)\n"
                         '当前版本暂不支持处理表情&图片，只会原路返回')
 
-    elif status[str(qq_sender)] in [3, 4]:
+    elif status[str(qq_sender)] in [11, 12, 13, 14]:
         if message_receive in ['m0', 'M0']:
             status[str(qq_sender)] = 0
             send(qq_sender, "已取消")

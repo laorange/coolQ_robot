@@ -1,6 +1,6 @@
 # Send
 # 用requests构造一个http post请求，post的数据填入相关信息：
-# https://zhuanlan.zhihu.com/p/96892167?from_voters_page=true
+# 参考知乎文章https://zhuanlan.zhihu.com/p/96892167?from_voters_page=true
 import requests
 
 
