@@ -9,10 +9,11 @@ from robot import get_answer
 
 def main(nickname_sender, qq_sender, message_receive):
     if message_receive in ['复习', '我要复习', '学习', '我要学习']:
-        review()
+        review(qq_sender)
     elif message_receive in ['输入', 'input', '+', '添加', '添加单词']:
         input_word()
-    else:
+
+    def chat(qq_sender):
         answer = get_answer(message_receive)
         send(qq_sender, answer)
 
