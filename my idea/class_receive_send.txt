@@ -1,0 +1,66 @@
+from flask import Flask,request
+from json import loads
+
+
+class Receive:
+    def __init__(self):
+        """keep receiving"""
+        self.qq_sender = ''
+        self.nickname_sender = ''
+        self.message_receive = ''
+
+    def main(self):
+        bot_server = Flask(__name__)
+
+        @bot_server.route('/api/message', methods=['POST'])
+        # 路径是你在酷Q配置文件里自定义的
+        def server():
+            data = request.get_data().decode('utf-8')
+            data = loads(data)
+            # print(data)
+            self.qq_sender = data['sender']['user_id']
+            self.nickname_sender = data['sender']['nickname']
+            self.message_receive = data['message']
+            print('{}(qq:{}):{}'.format(self.nickname_sender, self.qq_sender, self.message_receive))
+            return ''
+
+        bot_server.run(port=5701)
+        # 端口也是你在酷Q配置文件里自定义的
+
+
+a = Receive()
+a.main()
+
+
+---------------------------------
+
+# Send
+# 用requests构造一个http post请求，post的数据填入相关信息：
+# https://zhuanlan.zhihu.com/p/96892167?from_voters_page=true
+
+import requests
+
+
+class Send:
+    def __init__(self, user_id=2625835752, message=''):
+        """用于发送消息"""
+        self.user_id = user_id
+        self.message = message
+        self.data = {
+            'user_id': user_id,
+            'message': message,
+            'auto_escape': False
+        }
+
+    def send(self):
+        api_url = 'http://127.0.0.1:5700/send_private_msg'
+        # 酷Q运行在本地，端口为5700，所以server地址是127.0.0.1:5700
+        # api_url_group = 'http://127.0.0.1:5700/send_group_msg'
+
+        r = requests.post(api_url, data=self.data)
+        print(r.text)
+
+
+if __name__ == '__main__':
+    a = Send(message='你好')
+    a.send()
