@@ -14,14 +14,20 @@ def main(qq_sender, message_receive):
     # begin with changing the status code
     if str(qq_sender) not in status.keys():  # 初次使用
         status[str(qq_sender)] = 0
-        send(qq_sender, "您好,本机器人有5个模式\n"
+        send(qq_sender, "您好,欢迎使用本机器人\n您可以参考下列指令来使用本机器人\n"
                         "M0:聊天模式(默认模式),调用的是小思机器人(思知OwnThink)\n"
+                        "备忘录功能:(聊天模式下):\n"
+                        "格式:年月日时分 某事，例:202008082000 买票\n"
+                        "(时间和事件之间,要间隔空格)"
+                        '机器人将会在2020年08月08日20点00分提醒您"机票\n"'
                         "M1:导入英语单词模式\n"
-                        "M2:复习英语单词模式\n"
+                        "M2:复习英语单词模式(尚未完成)\n"
+                        "L1:获取当前已导入的英语单词列表(尚未完成)\n"
                         "M3:导入法语单词模式\n"
-                        "M4:复习法语单词模式\n"
-                        "若需要切换模式请输入M0/M1/M2/M3/M4 (m可以小写)\n"
-                        '当前版本暂不支持处理表情&图片，只会原路返回')
+                        "M4:复习法语单词模式(尚未完成)\n"
+                        "L2:获取当前已导入的法语单词列表(尚未完成)\n"
+                        "若需要切换模式请输入M0/M1/M2/M3/M4/L1/L2 (m,l均可以小写)\n"
+                        'help:再次获取以上提示')
 
     elif status[str(qq_sender)] in [11, 12, 13, 14]:
         if message_receive in ['m0', 'M0']:
@@ -42,13 +48,13 @@ def main(qq_sender, message_receive):
                         '若确认开始请回复任意其他语句')
 
     elif message_receive in ['m3', 'M3']:   # , '输入', 'input', '+', '添加', '添加单词'
-        status[str(qq_sender)] = 1
+        status[str(qq_sender)] = 3
         send(qq_sender, '即将向当前数据库导入法语单词，\n'
                         '若想要取消请回复"m0"或"M0",\n'
                         '若确认要开始请直接回复想要导入的单词')
 
     elif message_receive in ['m4', 'M4']:   # , '复习', '我要复习', '学习', '我要学习'
-        status[str(qq_sender)] = 2
+        status[str(qq_sender)] = 4
         send(qq_sender, '即将开始复习当前数据库中的法语单词,\n'
                         '若想要取消请回复"m0"或"M0",\n'
                         '若确认开始请回复任意其他语句')
