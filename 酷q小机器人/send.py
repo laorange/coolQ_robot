@@ -38,7 +38,7 @@ def cal_delay(goal_time, period=86400, nth_circle_init=0):
 def send(user_id=2625835752, message='', timing=''):
     if len(timing) == 0:
         data = {
-            'user_id': user_id,
+            'user_id': int(user_id),
             'message': message,
             'auto_escape': False
         }
@@ -48,7 +48,7 @@ def send(user_id=2625835752, message='', timing=''):
 
         r = requests.post(api_url, data=data)
         print(r.text)
-        # return 0  # tomorrow的值
+        return ''
 
     else:
         # mk_time_tomorrow_tuple = mk_goal_time(timing)
@@ -56,10 +56,11 @@ def send(user_id=2625835752, message='', timing=''):
         s.enter(delay, 0, send, (user_id, message, ''))
         s.run()
         # return mk_time_tomorrow_tuple[1]  # tomorrow的值
+        return ''
 
 
 if __name__ == '__main__':
-    print("tomorrow:{}".format(send(message='你好', timing='1611')))
+    print(send(message='你好', timing='1611'))
 
 # class Send:
 #     def __init__(self, user_id=2625835752, message=''):

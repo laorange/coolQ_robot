@@ -1,4 +1,5 @@
 # main.py
+import re
 from flask import Flask, request
 from json import loads
 import time  # 只用了.sleep()
@@ -11,6 +12,9 @@ from robot import get_answer
 from secret_code import secret_code
 from secret_code import secret_code_off
 from basic_functions import read_file2list
+from user_list import generate_user_list
+from user_list import add_2_user_list
+from help_user import help_user
 
 status = {}
 
@@ -19,58 +23,38 @@ def main(qq_sender, message_receive):
     # begin with changing the status code
     if str(qq_sender) not in status.keys():  # 初次使用
         status[str(qq_sender)] = 0
-        send(qq_sender, "您好,欢迎使用本机器人\n您可以参考下列指令来使用本机器人\n"
-                        "M0(默认模式):\n"
-                        "一、聊天模式，该模式下任何非功能性语句均调用小思(思知OwnThink)与您对话\n"
-                        '二、在聊天模式下输入"暗号"可激活对应的循环推送功能\n'
-                        '三、在聊天模式下可使用"备忘录功能":\n'
-                        "  ①24小时内的一次性备忘\n   例:0809买票\n   (小时+分钟+事件,中间请不要间隔任何符号)"
-                        '   机器人将会在当天08点09分提醒您"买票"\n   (若当天该时刻已过,将会在次日08点09分提醒)\n'
-                        '  ②每日或每周的重复提醒属于循环推送，请使用"暗号"激活)')
-        time.sleep(1)
-        send(qq_sender, "M1:导入英语单词模式\n"
-                        "M2:复习英语单词模式(尚未完成)\n"
-                        # "L1:获取当前已导入的英语单词列表(尚未完成)\n"
-                        "M3:导入法语单词模式\n"
-                        "M4:复习法语单词模式(尚未完成)")
-        time.sleep(1)
-        send(qq_sender, "在M0(默认模式),可输入以下功能性语句:\n"                
-                        'help:再次获取这些提示\n'
-                        '输入M0/M1/M2/M3/M4(m可以小写)来切换模式\n\n'
-                        '暗号(# + 8位密码)(功能正在开发):\n'
-                        '#EVERYDAY:每日提醒(循环备忘录)\n'
-                        '#EVERYW1K:每周提醒(循环备忘录)\n'
-                        '#000001EN:每日推送部分已导入的英语单词以复习(功能正在开发)\n'
-                        '#000001FR:每日推送部分已导入的法语单词以复习(功能正在开发)\n'
-                        '......\n'
-                        '解除暗号对应功能(* + 8位密码)(功能正在开发)')
+
+    if str(qq_sender) not in generate_user_list():
+        add_2_user_list(qq_sender)
+        help_user(qq_sender)
         message_receive = ''
 
-    elif status[str(qq_sender)] in [11, 12, 13, 14]:
+    elif status[str(qq_sender)] in [11, 12, 13, 14, 19]:
         if message_receive in ['m0', 'M0']:
             status[str(qq_sender)] = 0
             send(qq_sender, "已取消")
             message_receive = ''
 
-    elif message_receive[0] in ['#', '*']:
-        s_code_ls = read_file2list("/user_data/secret_code.txt")
-        # with open("/user_data/secret_code.txt") as s_codes:
-        #     s_code_ls = s_codes.readlines()
-        #     for s_code in s_code_ls:
-        #         s_code.strip()
-        if message_receive[0] == '*':
-            message_check = '#' + message_receive[1:]
-        if message_receive in s_code_ls:
-            secret_code(message_receive)
-            message_receive = ''
-            send(qq_sender, '正在激活该暗号对应功能...')
-        elif message_check in s_code_ls:
-            secret_code_off(message_receive)
-            message_receive = ''
-            send(qq_sender, '正在关闭该暗号对应功能...')
-        else:
-            send(qq_sender, '并没有这个暗号，请查证后稍后再试')
-            message_receive = ''
+    # elif message_receive[0] in ['#', '*']:
+    #     s_code_ls = read_file2list("/user_data/secret_code.txt")
+    #
+    #     if message_receive[0] == '*':
+    #         message_check = '#' + message_receive[1:]
+    #     if message_receive in s_code_ls:
+    #         secret_code(message_receive)
+    #         message_receive = ''
+    #         send(qq_sender, '正在激活该暗号对应功能...')
+    #     elif message_check in s_code_ls:
+    #         secret_code_off(message_receive)
+    #         message_receive = ''
+    #         send(qq_sender, '正在关闭该暗号对应功能...')
+    #     else:
+    #         send(qq_sender, '并没有这个暗号，请查证后稍后再试')
+    #         message_receive = ''
+
+    elif message_receive in ['help', 'Help', 'HELP', 'HELp', 'HElp']:
+        help_user(qq_sender)
+        message_receive = ''
 
     elif message_receive in ['m1', 'M1']:   # , '输入', 'input', '+', '添加', '添加单词'
         status[str(qq_sender)] = 1
@@ -99,12 +83,18 @@ def main(qq_sender, message_receive):
     elif message_receive in ['m0', 'M0']:   # , '结束', 'end', 'over', 'stop'
         status[str(qq_sender)] = 0
 
+    elif message_receive in ['m9', 'M9']:
+        send(qq_sender, '已进入反馈模式,此时您可以提交您在使用该机器人过程中遇到的问题。'
+                        '同时，期待能够收到您的建议\n若您想要取消,请回复M0/m0')
+        status[str(qq_sender)] = 9
+
     # 根据状态执行功能
-    if status[str(qq_sender)] == 0:  # chat
+    elif status[str(qq_sender)] == 0:  # chat
         if message_receive in ['m0', 'M0']:
             send(qq_sender, "当前已经是聊天模式了,\n如果想更改模式,\n"
                             "请输入m1/M1来导入单词,\n输入m2/M2来复习单词")
             message_receive = ''
+
         elif len(message_receive) > 8:
             if message_receive[:8] == '[CQ:face':
                 send(qq_sender, message_receive)
@@ -121,11 +111,11 @@ def main(qq_sender, message_receive):
             num = eval(message_receive)
             if isinstance(num, int):
                 if num > 0:
-                    status[str(qq_sender)] += 10  # 进入激活态2
                     if status[str(qq_sender)] == 11:
                         rev = Review(qq_sender, 'en', num)
                     if status[str(qq_sender)] == 13:
                         rev = Review(qq_sender, 'fr', num)
+                    status[str(qq_sender)] += 10  # 进入激活态2
                     rev.review()
             else:
                 raise SyntaxError
@@ -148,6 +138,11 @@ def main(qq_sender, message_receive):
         code_change = review(qq_sender, 'fr')
         if code_change == 1:
             status[str(qq_sender)] = 0
+
+    elif status[str(qq_sender)] == 9:
+        send(2625835752, '[CQ:face,id=54]'+str(qq_sender)+'\n'+message_receive)
+        send(qq_sender, '反馈成功!\n感谢您的反馈,我收到消息后会尽快与您联系\n已为自动您切换回聊天模式')
+        status[str(qq_sender)] = 0
 
     # end with changing the status code
     if status[str(qq_sender)] in [1, 2, 3, 4]:
