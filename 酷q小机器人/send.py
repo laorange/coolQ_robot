@@ -9,16 +9,16 @@ s = sched.scheduler(time.time, time.sleep)
 
 
 def mk_goal_time(goal_time_hm, period=86400):
-    # print(int(time.strftime('%H%M', time.gmtime())))
+    # print(int(time.strftime('%H%M', time.localtime())))
     # print(int(goal_time_hm))
-    if int(time.strftime('%H%M', time.gmtime())) > int(goal_time_hm):  # 今天的目标时间已经过了
-        print(int(time.strftime('%H%M', time.gmtime())))
+    if int(time.strftime('%H%M', time.localtime())) > int(goal_time_hm):  # 今天的目标时间已经过了
+        print(int(time.strftime('%H%M', time.localtime())))
         print(int(goal_time_hm))
-        goal_time_str = time.strftime('%Y%m%d', time.gmtime(time.time() + period)) + goal_time_hm + '00'
+        goal_time_str = time.strftime('%Y%m%d', time.localtime(time.time() + period)) + goal_time_hm + '00'
         tomorrow = 1
         print("tomorrow:{}{}".format(goal_time_hm, tomorrow))
     else:  # 今天的目标时间还没过
-        goal_time_str = time.strftime('%Y%m%d', time.gmtime()) + goal_time_hm + '00'
+        goal_time_str = time.strftime('%Y%m%d', time.localtime()) + goal_time_hm + '00'
         tomorrow = 0
         print("tomorrow:{}{}".format(goal_time_hm, tomorrow))
     goal_time = time.mktime(time.strptime(goal_time_str, '%Y%m%d%H%M%S'))

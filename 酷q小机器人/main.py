@@ -1,7 +1,7 @@
 # main.py
 from flask import Flask, request
 from json import loads
-import time
+import time  # 只用了.sleep()
 
 from send import send
 from review import review

@@ -13,8 +13,8 @@ nth_circle = 0
 s = sched.scheduler(time.time, time.sleep)
 s1 = sched.scheduler(time.time, time.sleep)
 
-t_Ymd = time.strftime("%Y%m%d", time.gmtime())
-t_weekday = time.strftime("%A", time.gmtime())
+t_Ymd = time.strftime("%Y%m%d", time.localtime())
+t_weekday = time.strftime("%A", time.localtime())
 # print(t_Ymd, t_weekday)
 
 
@@ -93,12 +93,12 @@ if __name__ == "__main__":
 #
 #
 # def mk_goal_time(goal_time_hm):
-#     if int(time.strftime('%H%M', time.gmtime())) > int(goal_time_hm):  # 今天的目标时间已经过了
-#         goal_time_str = time.strftime('%Y%m%d', time.gmtime(time.time() + 86400)) + goal_time_hm + '00'
+#     if int(time.strftime('%H%M', time.localtime())) > int(goal_time_hm):  # 今天的目标时间已经过了
+#         goal_time_str = time.strftime('%Y%m%d', time.localtime(time.time() + 86400)) + goal_time_hm + '00'
 #         tomorrow = 1
 #         print("tomorrow:{}".format(tomorrow))
 #     else:  # 今天的目标时间还没过
-#         goal_time_str = time.strftime('%Y%m%d', time.gmtime()) + goal_time_hm + '00'
+#         goal_time_str = time.strftime('%Y%m%d', time.localtime()) + goal_time_hm + '00'
 #         tomorrow = 0
 #         print("tomorrow:{}".format(tomorrow))
 #     goal_time = time.mktime(time.strptime(goal_time_str, '%Y%m%d%H%M%S'))
