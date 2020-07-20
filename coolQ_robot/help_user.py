@@ -37,7 +37,8 @@ def help_user(qq_sender):
                     # '③#000001EN:每日推送部分已导入的英语单词以复习(该功能短期内不会开发)\n'
                     # '④#000001FR:每日推送部分已导入的法语单词以复习(该功能短期内不会开发)\n'
                     '......\n'
-                    '解除暗号对应功能(* + 8位密码)(尚未完成)')
+                    '解除暗号对应功能(* + 8位密码)(尚未完成)'
+                    '源代码:https://github.com/laorange/coolQ_robot/tree/master/coolQ_robot')
 
 
 if __name__ == "__main__":
