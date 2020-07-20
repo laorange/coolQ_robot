@@ -1,7 +1,7 @@
-#secret_code.py
-def secret_code(code):
+# secret_code.py
+def secret_code(code, qq):
     pass
 
 
-def secret_code_off(code):
+def secret_code_off(code, qq):
     pass

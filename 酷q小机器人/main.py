@@ -2,12 +2,15 @@
 import re
 from flask import Flask, request
 from json import loads
-import time  # 只用了.sleep()
+from threading import Thread
+# import time  # 只用了.sleep()
 
 from send import send
 from review import review
 from review import Review
 from input import input_word
+from input import input_inform_once
+from input import input_today_once_inform
 from robot import get_answer
 from secret_code import secret_code
 from secret_code import secret_code_off
@@ -16,41 +19,69 @@ from user_list import generate_user_list
 from user_list import add_2_user_list
 from help_user import help_user
 
+
+from verify_time import check_send_per_min
+
 status = {}
 
 
 def main(qq_sender, message_receive):
-    # begin with changing the status code
+    m_once_inform = re.match(r'(\d{12})(.*)', message_receive)
+    m_today_once_inform = re.match(r'(\d{4})(.*)', message_receive)
+    m_secret_code = re.match(r'#(.{8})(.*)', message_receive)
+    m_secret_code_off = re.match(r'(\*)(.{8})(.*)', message_receive)
+    m_emotion = re.match(r'(.*)([CQ:face,id=\d+])(.*)', message_receive)
+    m_image = re.match(r'\[CQ:image.*url=\((http.+)\)\]', message_receive)
+
+    # 本次程序运行后，该用户第一次使用前的初始化
     if str(qq_sender) not in status.keys():  # 初次使用
         status[str(qq_sender)] = 0
 
+    # 该用户第一次使用，记录该用户
     if str(qq_sender) not in generate_user_list():
         add_2_user_list(qq_sender)
         help_user(qq_sender)
         message_receive = ''
 
-    elif status[str(qq_sender)] in [11, 12, 13, 14, 19]:
-        if message_receive in ['m0', 'M0']:
-            status[str(qq_sender)] = 0
-            send(qq_sender, "已取消")
-            message_receive = ''
+    # change the status code
+    elif status[str(qq_sender)] in [9, 11, 12, 13, 14] and message_receive in ['m0', 'M0']:
+        status[str(qq_sender)] = 0
+        send(qq_sender, "已取消")
+        message_receive = ''
 
-    # elif message_receive[0] in ['#', '*']:
-    #     s_code_ls = read_file2list("/user_data/secret_code.txt")
-    #
-    #     if message_receive[0] == '*':
-    #         message_check = '#' + message_receive[1:]
-    #     if message_receive in s_code_ls:
-    #         secret_code(message_receive)
-    #         message_receive = ''
-    #         send(qq_sender, '正在激活该暗号对应功能...')
-    #     elif message_check in s_code_ls:
-    #         secret_code_off(message_receive)
-    #         message_receive = ''
-    #         send(qq_sender, '正在关闭该暗号对应功能...')
-    #     else:
-    #         send(qq_sender, '并没有这个暗号，请查证后稍后再试')
-    #         message_receive = ''
+    # 功能语句区
+    # 切换回M0
+    elif message_receive in ['m0', 'M0']:   # , '结束', 'end', 'over', 'stop'
+        send(qq_sender, "已自动为您切换回聊天模式")
+        status[str(qq_sender)] = 0
+
+    # 暗号功能
+    elif m_secret_code:
+        s_code_ls = read_file2list("/user_data/secret_code.txt")
+        if m_secret_code.group(1) in s_code_ls:
+            secret_code(m_secret_code.group(1), qq_sender)
+            send(qq_sender, '已激活该暗号对应功能...')
+        else:
+            send(qq_sender, '并没有这个暗号，请查证后稍后再试')
+        message_receive = ''
+
+    elif m_secret_code_off:
+        send(qq_sender, 'sorry，该功能尚未完成，请过几天再试。已自动为您切换回聊天模式')
+        message_receive = ''
+        # elif message_check in s_code_ls:
+        #     secret_code_off(message_receive)
+        #     message_receive = ''
+        #     send(qq_sender, '正在关闭该暗号对应功能...')
+
+    # 一次性提醒
+    elif m_once_inform:
+        input_inform_once(qq_sender, m_once_inform.group(2), m_once_inform.group(1))
+        send(qq_sender, '已添加提醒，将在{}提醒您"{}"'.format(m_once_inform.group(1), m_once_inform.group(2)))
+
+    elif m_today_once_inform:
+        input_inform_once(qq_sender, m_once_inform.group(2), m_once_inform.group(1))
+        send(qq_sender, '已添加提醒，将在今天{}提醒您"{}"'.format(m_once_inform.group(1)[:3] +
+                                                     ':'+m_once_inform.group(1)[3:], m_once_inform.group(2)))
 
     elif message_receive in ['help', 'Help', 'HELP', 'HELp', 'HElp']:
         help_user(qq_sender)
@@ -80,28 +111,26 @@ def main(qq_sender, message_receive):
                         '若想要取消请回复"m0"或"M0",\n'
                         '若确认开始请回复本次复习单词的个数(正整数)')
 
-    elif message_receive in ['m0', 'M0']:   # , '结束', 'end', 'over', 'stop'
-        status[str(qq_sender)] = 0
-
     elif message_receive in ['m9', 'M9']:
         send(qq_sender, '已进入反馈模式,此时您可以提交您在使用该机器人过程中遇到的问题。'
                         '同时，期待能够收到您的建议\n若您想要取消,请回复M0/m0')
+        message_receive = ''
         status[str(qq_sender)] = 9
 
     # 根据状态执行功能
     elif status[str(qq_sender)] == 0:  # chat
         if message_receive in ['m0', 'M0']:
-            send(qq_sender, "当前已经是聊天模式了,\n如果想更改模式,\n"
-                            "请输入m1/M1来导入单词,\n输入m2/M2来复习单词")
+            send(qq_sender, "当前已经是聊天模式了,\n如果不是很清楚怎么切换模式,请输入help\n")
             message_receive = ''
 
-        elif len(message_receive) > 8:
-            if message_receive[:8] == '[CQ:face':
-                send(qq_sender, message_receive)
-                message_receive = ''
-            elif message_receive[:9] == '[CQ:image':
-                send(qq_sender, message_receive.split(',')[-1][4:-1])
-                message_receive = ''
+        elif m_emotion:
+            send(qq_sender, m_emotion.group(2))
+            message_receive = m_emotion.group(1)+' '+m_emotion.group(3)
+
+        elif m_image:
+            send(qq_sender, '图片链接:'+m_image.group(1))
+
+        # 正常的chat:
         if message_receive.strip() != '':
             answer = get_answer(message_receive)
             send(qq_sender, answer)
@@ -140,8 +169,10 @@ def main(qq_sender, message_receive):
             status[str(qq_sender)] = 0
 
     elif status[str(qq_sender)] == 9:
-        send(2625835752, '[CQ:face,id=54]'+str(qq_sender)+'\n'+message_receive)
+        print('here')
+        send(2625835752, '用户qq'+str(qq_sender)+'反馈：\n'+message_receive)
         send(qq_sender, '反馈成功!\n感谢您的反馈,我收到消息后会尽快与您联系\n已为自动您切换回聊天模式')
+        message_receive = ''
         status[str(qq_sender)] = 0
 
     # end with changing the status code
@@ -182,5 +213,8 @@ def receive():
 
 
 if __name__ == "__main__":
-    receive()
+    t1 = Thread(target=check_send_per_min)
+    t2 = Thread(target=receive)
+    t1.start()
+    t2.start()
 
