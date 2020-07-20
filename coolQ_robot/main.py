@@ -3,7 +3,6 @@ import re
 from flask import Flask, request
 from json import loads
 from threading import Thread
-# import time  # 只用了.sleep()
 
 from send import send
 from review import review
@@ -13,7 +12,7 @@ from input import input_inform_once
 from input import input_today_once_inform
 from robot import get_answer
 from secret_code import secret_code
-from secret_code import secret_code_off
+# from secret_code import secret_code_off
 from basic_functions import read_file2list
 from user_list import generate_user_list
 from user_list import add_2_user_list
