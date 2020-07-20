@@ -33,7 +33,7 @@ def verify_each_ls(time2verify_ls_ls):
 
 def every_min_check():
     time2verify_ls_ls = [add_one_time_list(), add_every_day_list(), add_every_week_list()]
-    s.enter(5, 0, every_min_check, ())
+    s.enter(59, 0, every_min_check, ())
     verify_each_ls(time2verify_ls_ls)
     s.run()
     if time.strftime("%H%M", time.localtime()) == '0000':

@@ -28,10 +28,13 @@ status = {}
 def main(qq_sender, message_receive):
     m_once_inform = re.match(r'^(\d{12})(.*)', message_receive)
     m_today_once_inform = re.match(r'^(\d{4})(.*)', message_receive)
+    m_every_day_inform = re.match(r'#EDAY(\d{4})(.*)')
+    m_every_week_inform = re.match(r'#EWK(\d)(\d{4})(.*)')
+
     m_secret_code = re.match(r'#(.{8})(.*)', message_receive)
     m_secret_code_off = re.match(r'(\*)(.{8})(.*)', message_receive)
-    m_emotion = re.match(r'(.*)([CQ:face,id=\d+])(.*)', message_receive)
-    m_image = re.match(r'\[CQ:image.*url=\((http.+)\)\]', message_receive)
+    m_emotion = re.match(r'(.*)(\[CQ:face,id=\d+\])(.*)', message_receive)
+    m_image = re.match(r'\[CQ:image.*url=(.+)\]', message_receive)
 
     s_code_ls = read_file2list("user_data/secret_code/secret_code.txt")
 
@@ -89,10 +92,17 @@ def main(qq_sender, message_receive):
         send(qq_sender, '已添加提醒，将在今天{}提醒您"{}"'.format(m_today_once_inform.group(1)[:2] + ':' +
                                                      m_today_once_inform.group(1)[2:], m_today_once_inform.group(2)))
 
+    # 循环提醒
+    elif m_every_day_inform or m_every_week_inform:
+        secret_code(message_receive[:8], qq_sender, extra_info=message_receive[8:])
+        message_receive = ''
+
+    # help
     elif message_receive in ['help', 'Help', 'HELP', 'HELp', 'HElp']:
         help_user(qq_sender)
         message_receive = ''
 
+    # Mn切换模式
     elif message_receive in ['m1', 'M1']:   # , '输入', 'input', '+', '添加', '添加单词'
         status[str(qq_sender)] = 1
         send(qq_sender, '即将向当前数据库导入英语单词，\n'
@@ -135,6 +145,7 @@ def main(qq_sender, message_receive):
 
         elif m_image:
             send(qq_sender, '图片链接:'+m_image.group(1))
+            message_receive = ''
 
         # 正常的chat:
         if message_receive.strip() != '':
