@@ -9,14 +9,14 @@ def input_word(qq_sender, word, language='en'):
     return code_change
 
 
-def input_inform_once(qq, message, send_time, code=''):
-    with open('user_data/everyday_infos/time2verify_one_time.txt', 'at') as time2verify_one_time_txt:
+def input_inform_once(qq, message, send_time, code='m_day_one_time'):
+    with open('user_data/everyday_infos/time2verify_one_time.txt', 'at', encoding='ANSI') as time2verify_one_time_txt:
         time2verify_one_time_txt.write(code + '^' + str(int(qq)) + '^' + message + '^' + send_time + '\n')
 
 
-def input_today_once_inform(qq, message, send_time, code=''):
+def input_today_once_inform(qq, message, send_time, code='today_one_time'):
     t_Ymd = time.strftime("%Y%m%d", time.localtime())
-    with open('user_data/everyday_infos/time2verify_one_time.txt', 'at') as time2verify_one_time_txt:
+    with open('user_data/everyday_infos/time2verify_one_time.txt', 'at', encoding='ANSI') as time2verify_one_time_txt:
         time2verify_one_time_txt.write(code + '^' + str(int(qq)) + '^' + message + '^' + t_Ymd + send_time + '\n')
 
 

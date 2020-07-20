@@ -10,7 +10,7 @@ def make_dir(path_name):  # os.mkdir("./输出文件")
         pass
 
 
-def read_file2list(path_name, encoding='UTF-8'):
+def read_file2list(path_name, encoding='ANSI'):
     with open(path_name, encoding=encoding) as source_text:
         lines_ls = source_text.readlines()
         for i in range(len(lines_ls)):

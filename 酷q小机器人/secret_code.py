@@ -1,7 +1,7 @@
 # secret_code.py
 def secret_code(code, qq, extra_info=''):
     if code[:4] == 'EDAY':
-        with open(r'user_data\everyday_infos\time2verify_every_day.txt', 'at') as time2verify_every_day_txt:
+        with open(r'user_data\everyday_infos\time2verify_every_day.txt', 'at', encoding='ANSI') as time2verify_every_day_txt:
             time2verify_every_day_txt.write(code+'^'+str(int(qq))+'^'+extra_info+'^'+code[4:]+'\n')
 
     if code[:3] == 'EWK':
@@ -19,7 +19,7 @@ def secret_code(code, qq, extra_info=''):
             week_day = 'Saturday'
         elif code[3] == '7':
             week_day = 'Sunday'
-        with open("user_data\\everyday_infos\\"+week_day+".txt", 'at') as time2verify_every_day_txt:
+        with open("user_data\\everyday_infos\\"+week_day+".txt", 'at', encoding='ANSI') as time2verify_every_day_txt:
             time2verify_every_day_txt.write(code+'^'+str(int(qq))+'^'+extra_info+'^'+code[4:]+'\n')
 
     pass
