@@ -28,8 +28,8 @@ status = {}
 def main(qq_sender, message_receive):
     m_once_inform = re.match(r'^(\d{12})(.*)', message_receive)
     m_today_once_inform = re.match(r'^(\d{4})(.*)', message_receive)
-    m_every_day_inform = re.match(r'#EDAY(\d{4})(.*)')
-    m_every_week_inform = re.match(r'#EWK(\d)(\d{4})(.*)')
+    m_every_day_inform = re.match(r'#EDAY(\d{4})(.*)', message_receive)
+    m_every_week_inform = re.match(r'#EWK(\d)(\d{4})(.*)', message_receive)
 
     m_secret_code = re.match(r'#(.{8})(.*)', message_receive)
     m_secret_code_off = re.match(r'(\*)(.{8})(.*)', message_receive)
