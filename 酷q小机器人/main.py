@@ -26,12 +26,14 @@ status = {}
 
 
 def main(qq_sender, message_receive):
-    m_once_inform = re.match(r'(\d{12})(.*)', message_receive)
-    m_today_once_inform = re.match(r'(\d{4})(.*)', message_receive)
+    m_once_inform = re.match(r'^(\d{12})(.*)', message_receive)
+    m_today_once_inform = re.match(r'^(\d{4})(.*)', message_receive)
     m_secret_code = re.match(r'#(.{8})(.*)', message_receive)
     m_secret_code_off = re.match(r'(\*)(.{8})(.*)', message_receive)
     m_emotion = re.match(r'(.*)([CQ:face,id=\d+])(.*)', message_receive)
     m_image = re.match(r'\[CQ:image.*url=\((http.+)\)\]', message_receive)
+
+    s_code_ls = read_file2list("user_data/secret_code/secret_code.txt")
 
     # 本次程序运行后，该用户第一次使用前的初始化
     if str(qq_sender) not in status.keys():  # 初次使用
@@ -57,9 +59,8 @@ def main(qq_sender, message_receive):
 
     # 暗号功能
     elif m_secret_code:
-        s_code_ls = read_file2list("/user_data/secret_code.txt")
         if m_secret_code.group(1) in s_code_ls:
-            secret_code(m_secret_code.group(1), qq_sender)
+            secret_code(m_secret_code.group(1), qq_sender, m_secret_code.group(2))
             send(qq_sender, '已激活该暗号对应功能...')
         else:
             send(qq_sender, '并没有这个暗号，请查证后稍后再试')
@@ -76,12 +77,17 @@ def main(qq_sender, message_receive):
     # 一次性提醒
     elif m_once_inform:
         input_inform_once(qq_sender, m_once_inform.group(2), m_once_inform.group(1))
-        send(qq_sender, '已添加提醒，将在{}提醒您"{}"'.format(m_once_inform.group(1), m_once_inform.group(2)))
+        send(qq_sender, '已添加提醒，将在{}.{}.{} {}:{}提醒您"{}"'.format(m_once_inform.group(1)[:4],
+                                                               m_once_inform.group(1)[4:6],
+                                                               m_once_inform.group(1)[6:8],
+                                                               m_once_inform.group(1)[8:10],
+                                                               m_once_inform.group(1)[10:],
+                                                               m_once_inform.group(2)))
 
     elif m_today_once_inform:
-        input_inform_once(qq_sender, m_once_inform.group(2), m_once_inform.group(1))
-        send(qq_sender, '已添加提醒，将在今天{}提醒您"{}"'.format(m_once_inform.group(1)[:3] +
-                                                     ':'+m_once_inform.group(1)[3:], m_once_inform.group(2)))
+        input_today_once_inform(qq_sender, m_today_once_inform.group(2), m_today_once_inform.group(1))
+        send(qq_sender, '已添加提醒，将在今天{}提醒您"{}"'.format(m_today_once_inform.group(1)[:2] + ':' +
+                                                     m_today_once_inform.group(1)[2:], m_today_once_inform.group(2)))
 
     elif message_receive in ['help', 'Help', 'HELP', 'HELp', 'HElp']:
         help_user(qq_sender)

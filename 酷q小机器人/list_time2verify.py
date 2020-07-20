@@ -1,5 +1,4 @@
 import time
-import sched
 from basic_functions import read_file2list
 
 t_Ymd = time.strftime("%Y%m%d", time.localtime())
@@ -58,3 +57,6 @@ def rewrite_one_time_list(time2verify_one_time_ls):
             one_time_txt.write(each_info.secret_code+'^'+str(each_info.qq)+'^'
                                + each_info.message+'^'+each_info.send_time)
 
+
+if __name__ == '__main__':
+    pass
