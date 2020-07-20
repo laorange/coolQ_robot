@@ -1,4 +1,3 @@
-# -*- coding:utf-8-*-
 import requests
 
 
@@ -7,7 +6,7 @@ def get_answer(text):    # 获取思知机器人的回复信息
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
         'Referer': 'https://robot.ownthink.com/',
-    }  # 出于习惯加上的请求头，可无
+    }
 
     def get_data(text_for_data):  # 请求思知机器人API所需要的一些信息
         pre_data = {
@@ -25,3 +24,6 @@ def get_answer(text):    # 获取思知机器人的回复信息
     answer = result['data']['info']['text']
     return answer
 
+
+if __name__ == "__main__":
+    get_answer("你好")

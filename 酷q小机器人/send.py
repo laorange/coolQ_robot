@@ -27,7 +27,7 @@ def mk_goal_time(goal_time_hm, period=86400):
 
 def cal_delay(goal_time, period=86400, nth_circle_init=0):
     nth_circle = nth_circle_init
-    #print(type(goal_time))
+    # print(type(goal_time))
     result_delay = goal_time + nth_circle * period - time.time()
     while result_delay < 0:  # 前面mk_goal_time已经处理过了，此处nth_circle恒为0
         nth_circle += 1
