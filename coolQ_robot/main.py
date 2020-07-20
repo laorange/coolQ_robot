@@ -60,7 +60,45 @@ def main(qq_sender, message_receive):
         send(qq_sender, "已自动为您切换回聊天模式")
         status[str(qq_sender)] = 0
 
-    # 暗号功能
+    # 一次性提醒
+    elif m_once_inform:
+        print('m_once_inform')
+        t_YmdHM_now = time.strftime("%Y%m%d%H%M", time.localtime())
+        if int(t_YmdHM_now) <= int(m_once_inform.group(1)):
+            input_inform_once(qq_sender, m_once_inform.group(2), m_once_inform.group(1))
+            send(qq_sender, '已添加提醒，将在{}.{}.{} {}:{}提醒您"{}"'.format(m_once_inform.group(1)[:4],
+                                                                   m_once_inform.group(1)[4:6],
+                                                                   m_once_inform.group(1)[6:8],
+                                                                   m_once_inform.group(1)[8:10],
+                                                                   m_once_inform.group(1)[10:],
+                                                                   m_once_inform.group(2)))
+        else:
+            send(qq_sender, "该时间点已经过了哟，已忽略本次操作")
+        message_receive = ''
+
+    elif m_today_once_inform:
+        print('m_today_once_inform')
+        t_HM_now = time.strftime("%H%M", time.localtime())
+        if int(t_HM_now) <= int(m_today_once_inform.group(1)):
+            input_today_once_inform(qq_sender, m_today_once_inform.group(2), m_today_once_inform.group(1))
+            send(qq_sender, '已添加提醒，将在今天{}提醒您"{}"'.format(m_today_once_inform.group(1)[:2] + ':' +
+                                                         m_today_once_inform.group(1)[2:], m_today_once_inform.group(2)))
+        else:
+            send(qq_sender, "该时间点已经过了哟，已忽略本次操作")
+        message_receive = ''
+
+    # 循环提醒
+    elif m_every_day_inform or m_every_week_inform:
+        print('m_every_day_inform or m_every_week_inform')
+        secret_code(message_receive[1:9], qq_sender, extra_info=message_receive[9:])
+        message_receive = ''
+
+    # help
+    elif message_receive in ['help', 'Help', 'HELP', 'HELp', 'HElp']:
+        help_user(qq_sender)
+        message_receive = ''
+
+        # 暗号功能
     elif m_secret_code:
         if m_secret_code.group(1) in s_code_ls:
             secret_code(m_secret_code.group(1), qq_sender, m_secret_code.group(2))
@@ -76,41 +114,6 @@ def main(qq_sender, message_receive):
         #     secret_code_off(message_receive)
         #     message_receive = ''
         #     send(qq_sender, '正在关闭该暗号对应功能...')
-
-    # 一次性提醒
-    elif m_once_inform:
-        t_YmdHM_now = time.strftime("%Y%m%d%H%M", time.localtime())
-        if int(t_YmdHM_now) <= int(m_once_inform.group(1)):
-            input_inform_once(qq_sender, m_once_inform.group(2), m_once_inform.group(1))
-            send(qq_sender, '已添加提醒，将在{}.{}.{} {}:{}提醒您"{}"'.format(m_once_inform.group(1)[:4],
-                                                                   m_once_inform.group(1)[4:6],
-                                                                   m_once_inform.group(1)[6:8],
-                                                                   m_once_inform.group(1)[8:10],
-                                                                   m_once_inform.group(1)[10:],
-                                                                   m_once_inform.group(2)))
-        else:
-            send(qq_sender, "该时间点已经过了哟，已忽略本次操作")
-        message_receive = ''
-
-    elif m_today_once_inform:
-        t_HM_now = time.strftime("%H%M", time.localtime())
-        if int(t_HM_now) <= int(m_today_once_inform.group(1)):
-            input_today_once_inform(qq_sender, m_today_once_inform.group(2), m_today_once_inform.group(1))
-            send(qq_sender, '已添加提醒，将在今天{}提醒您"{}"'.format(m_today_once_inform.group(1)[:2] + ':' +
-                                                         m_today_once_inform.group(1)[2:], m_today_once_inform.group(2)))
-        else:
-            send(qq_sender, "该时间点已经过了哟，已忽略本次操作")
-        message_receive = ''
-
-    # 循环提醒
-    elif m_every_day_inform or m_every_week_inform:
-        secret_code(message_receive[:8], qq_sender, extra_info=message_receive[8:])
-        message_receive = ''
-
-    # help
-    elif message_receive in ['help', 'Help', 'HELP', 'HELp', 'HElp']:
-        help_user(qq_sender)
-        message_receive = ''
 
     # Mn切换模式
     elif message_receive in ['m1', 'M1']:   # , '输入', 'input', '+', '添加', '添加单词'
