@@ -3,6 +3,7 @@ import re
 from flask import Flask, request
 from json import loads
 from threading import Thread
+import time
 
 from send import send
 from review import review
@@ -12,7 +13,7 @@ from input import input_inform_once
 from input import input_today_once_inform
 from robot import get_answer
 from secret_code import secret_code
-# from secret_code import secret_code_off
+from secret_code import secret_code_off
 from basic_functions import read_file2list
 from user_list import generate_user_list
 from user_list import add_2_user_list
@@ -78,18 +79,28 @@ def main(qq_sender, message_receive):
 
     # 一次性提醒
     elif m_once_inform:
-        input_inform_once(qq_sender, m_once_inform.group(2), m_once_inform.group(1))
-        send(qq_sender, '已添加提醒，将在{}.{}.{} {}:{}提醒您"{}"'.format(m_once_inform.group(1)[:4],
-                                                               m_once_inform.group(1)[4:6],
-                                                               m_once_inform.group(1)[6:8],
-                                                               m_once_inform.group(1)[8:10],
-                                                               m_once_inform.group(1)[10:],
-                                                               m_once_inform.group(2)))
+        t_YmdHM_now = time.strftime("%Y%m%d%H%M", time.localtime())
+        if int(t_YmdHM_now) <= int(m_once_inform.group(1)):
+            input_inform_once(qq_sender, m_once_inform.group(2), m_once_inform.group(1))
+            send(qq_sender, '已添加提醒，将在{}.{}.{} {}:{}提醒您"{}"'.format(m_once_inform.group(1)[:4],
+                                                                   m_once_inform.group(1)[4:6],
+                                                                   m_once_inform.group(1)[6:8],
+                                                                   m_once_inform.group(1)[8:10],
+                                                                   m_once_inform.group(1)[10:],
+                                                                   m_once_inform.group(2)))
+        else:
+            send(qq_sender, "该时间点已经过了哟，已忽略本次操作")
+        message_receive = ''
 
     elif m_today_once_inform:
-        input_today_once_inform(qq_sender, m_today_once_inform.group(2), m_today_once_inform.group(1))
-        send(qq_sender, '已添加提醒，将在今天{}提醒您"{}"'.format(m_today_once_inform.group(1)[:2] + ':' +
-                                                     m_today_once_inform.group(1)[2:], m_today_once_inform.group(2)))
+        t_HM_now = time.strftime("%H%M", time.localtime())
+        if int(t_HM_now) <= int(m_today_once_inform.group(1)):
+            input_today_once_inform(qq_sender, m_today_once_inform.group(2), m_today_once_inform.group(1))
+            send(qq_sender, '已添加提醒，将在今天{}提醒您"{}"'.format(m_today_once_inform.group(1)[:2] + ':' +
+                                                         m_today_once_inform.group(1)[2:], m_today_once_inform.group(2)))
+        else:
+            send(qq_sender, "该时间点已经过了哟，已忽略本次操作")
+        message_receive = ''
 
     # 循环提醒
     elif m_every_day_inform or m_every_week_inform:

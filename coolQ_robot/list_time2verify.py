@@ -55,7 +55,7 @@ def rewrite_one_time_list(time2verify_one_time_ls):
     with open("user_data/everyday_infos/time2verify_one_time.txt", 'wt') as one_time_txt:
         for each_info in time2verify_one_time_ls:
             one_time_txt.write(each_info.secret_code+'^'+str(each_info.qq)+'^'
-                               + each_info.message+'^'+each_info.send_time)
+                               + each_info.message+'^'+each_info.send_time+'\n')
 
 
 if __name__ == '__main__':
