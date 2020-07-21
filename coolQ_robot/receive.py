@@ -45,7 +45,7 @@ def main(qq_sender, message_receive):
     # 该用户第一次使用，记录该用户
     if str(qq_sender) not in generate_user_list():
         add_2_user_list(qq_sender)
-        help_user(qq_sender)
+        send(qq_sender, "您好,欢迎使用本机器人。您可以向我发送 help/Help/HELP 来获取使用说明")
         message_receive = ''
 
     # change the status code
@@ -94,7 +94,7 @@ def main(qq_sender, message_receive):
         message_receive = ''
 
     # help
-    elif message_receive in ['help', 'Help', 'HELP', 'HELp', 'HElp']:
+    elif message_receive in ['help', 'Help', 'HELP', 'HELp', 'HElp', 'help/Help/HELP']:
         help_user(qq_sender)
         message_receive = ''
 
