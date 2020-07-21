@@ -15,11 +15,11 @@ t_weekday = time.strftime("%A", time.localtime())
 s = sched.scheduler(time.time, time.sleep)
 
 
-def verify_time_send(time2verify_ls, judge_one_time='0'):
+def verify_time_send(time2verify_ls, judge_one_time):
     for time2verify in time2verify_ls:
         t_H_M_now = time.strftime("%H:%M", time.localtime())
         t_YmdHM_now = time.strftime("%Y%m%d%H%M", time.localtime())
-        print('qq:{},{},{},now:{}'.format(time2verify.qq, time2verify.message,time2verify.send_time, t_YmdHM_now))  # #####################
+        print('qq:{},{},{},now:{}'.format(time2verify.qq, time2verify.message, time2verify.send_time, t_YmdHM_now))  # #####################
         if t_YmdHM_now == time2verify.send_time:
             send(time2verify.qq, t_H_M_now + ' ' + time2verify.message)
             time2verify_ls.remove(time2verify)
@@ -31,7 +31,7 @@ def verify_time_send(time2verify_ls, judge_one_time='0'):
 def verify_each_ls(time2verify_ls_ls):
     for time2verify_ls in time2verify_ls_ls:
         if isinstance(time2verify_ls[0], list) and len(time2verify_ls[0]):
-            verify_time_send(time2verify_ls)
+            verify_time_send(time2verify_ls[0], time2verify_ls[1])
 
 
 def every_min_check():

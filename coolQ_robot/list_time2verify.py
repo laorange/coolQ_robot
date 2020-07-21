@@ -36,6 +36,7 @@ def add_every_week_list():
 def add_every_day_list():
     time2verify_every_day_ls = []
     every_day_csv_ls = read_file2list("user_data/everyday_infos/time2verify_every_day.csv")
+    print('every_day_csv_ls', end='')
     print(every_day_csv_ls)
     if len(every_day_csv_ls):
         for num in range(len(every_day_csv_ls)):
@@ -49,6 +50,7 @@ def add_every_day_list():
 def add_one_time_list():
     time2verify_one_time_ls = []
     one_time_csv_ls = read_file2list("user_data/everyday_infos/time2verify_one_time.csv")
+    print('one_time_csv_ls', end='')
     print(one_time_csv_ls)
     for num in range(len(one_time_csv_ls)):
         time2verify_one_time_ls.append(Time2Verify(one_time_csv_ls[num].split(',')[0],
