@@ -98,7 +98,7 @@ def main(qq_sender, message_receive):
         help_user(qq_sender)
         message_receive = ''
 
-        # 暗号功能
+    # 暗号功能
     elif m_secret_code:
         if m_secret_code.group(1) in s_code_ls:
             secret_code(m_secret_code.group(1), qq_sender, m_secret_code.group(2))
