@@ -36,7 +36,7 @@ def main(qq_sender, message_receive):
     m_emotion = re.match(r'(.*)(\[CQ:face,id=\d+\])(.*)', message_receive)
     m_image = re.match(r'\[CQ:image.*url=(.+)\]', message_receive)
 
-    s_code_ls = read_file2list("user_data/secret_code/secret_code.txt")
+    s_code_ls = read_file2list("user_data/secret_code/secret_code.csv")
 
     # 本次程序运行后，该用户第一次使用前的初始化
     if str(qq_sender) not in status.keys():  # 初次使用
