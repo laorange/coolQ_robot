@@ -31,5 +31,12 @@ def secret_code(code, qq, extra_info=''):
         pass
 
 
-def secret_code_off(code, qq):
+def secret_code_off(code, qq, extra_info=''):
+    if code[:4] == 'EDAY':
+        with open(r'user_data\everyday_infos\time2verify_every_day.csv', 'at') as time2verify_every_day_csv:
+            pass
+
+    elif code[:3] == 'EWK':
+        pass
+
     pass
