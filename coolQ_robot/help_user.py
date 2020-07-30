@@ -43,4 +43,4 @@ def help_user(qq_sender):
 
 
 if __name__ == "__main__":
-    help_user(2625835752)
+    help_user(2625835752)  # 这里是自己的QQ号

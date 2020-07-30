@@ -39,4 +39,5 @@ def secret_code_off(code, qq, extra_info=''):
     elif code[:3] == 'EWK':
         pass
 
-    pass
+    else:
+        pass
